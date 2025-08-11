@@ -6,7 +6,7 @@ import React from 'react'
 
 const page = () => {
   const trpc = useTRPC();
-  const {data} = useQuery(trpc.createAi.queryOptions({text:"Raj"}))
+  const {data} = useQuery(trpc.createAi.queryOptions({text:"Rammu"}))
 
   return (
     <div> 
