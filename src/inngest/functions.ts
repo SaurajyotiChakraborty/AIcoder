@@ -1,14 +1,22 @@
+import { gemini, createAgent } from "@inngest/agent-kit";
 import { inngest } from "./client";
 
 export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
+  { id: "hello-world-gemini" },
   { event: "test/hello.world" },
-  async ({ event, step }) => {
+  async ({ event }) => {
     
-    // transcript step
-    await step.sleep("wait-a-moment", "10s");
-    // summery step
-    await step.sleep("wait-a-moment", "5s");
-    return { message: `Hello ${event.data.email}!` };
+    const codeAgent = createAgent({
+      name: "code-agent",
+      system: "You are an expert next.js developer. You write readable , maintain code . You write next.js and react snippets",
+      model: gemini({ model: "gemini-2.0-flash-lite" }), // swapped openai -> gemini
+    });
+
+    const { output } =await codeAgent.run(
+      `write this following snippet:${event.data.value}`,
+    );
+    
+
+    return {  output };
   },
 );
